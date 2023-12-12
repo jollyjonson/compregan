@@ -3,7 +3,6 @@ from enum import IntEnum, unique
 
 @unique
 class Components(IntEnum):
-
     # networks
     Encoder = 0
     DecodingGenerator = 1

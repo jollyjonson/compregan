@@ -1,16 +1,18 @@
 import os
 import subprocess
 import warnings
-
-import tensorflow as tf
 from time import sleep
 
+import tensorflow as tf
 import tqdm
 
 
-def wait_for_gpu(polling_interval_in_s: float = 30, verbose: bool = True) -> None:
+def wait_for_gpu(
+    polling_interval_in_s: float = 30, verbose: bool = True
+) -> None:
     """
-    Pause program execution until no more python processes are seen occupying the GPU. Simply return when running on
+    Pause program execution until no more python processes are seen
+    occupying the GPU. Simply return when running on
     a machine without GPU.
     """
     if not tf.test.is_gpu_available():
@@ -19,12 +21,22 @@ def wait_for_gpu(polling_interval_in_s: float = 30, verbose: bool = True) -> Non
 
     else:
         if verbose:
-            progbar = tqdm.tqdm(desc=f"Waiting for GPU with polling interval {polling_interval_in_s}s", unit=" polls")
+            progbar = tqdm.tqdm(
+                desc=f"Waiting for GPU with polling "
+                f"interval {polling_interval_in_s}s",
+                unit=" polls",
+            )
         while True:
-
-            with subprocess.Popen(['nvidia-smi'], stdout=subprocess.PIPE) as proc:
-                for line in map(lambda byte_str: byte_str.decode('utf-8'), proc.stdout.readlines()):
-                    gpu_occupied = 'python' in line and not str(os.getpid()) in line
+            with subprocess.Popen(
+                ["nvidia-smi"], stdout=subprocess.PIPE
+            ) as proc:
+                for line in map(
+                    lambda byte_str: byte_str.decode("utf-8"),
+                    proc.stdout.readlines(),  # type: ignore
+                ):
+                    gpu_occupied = (
+                        "python" in line and not str(os.getpid()) in line
+                    )
                     if gpu_occupied:
                         break
 

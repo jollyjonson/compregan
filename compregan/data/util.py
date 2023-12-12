@@ -1,6 +1,3 @@
-import os.path as path
-import tempfile
-from tempfile import mkdtemp
 from typing import Callable, Optional, Tuple
 
 import numpy as np
@@ -9,13 +6,13 @@ from tqdm import tqdm
 
 
 def extract_and_preprocess_images(
-        tf_dataset_with_labels: tf.data.Dataset,
-        preprocess_func: Optional[Callable] = None,
-        image_dataset_dtype: Optional[tf.dtypes.DType] = None,
-        verbose: bool = True,
-        image_key: str = 'image',
-        target_size: Optional[Tuple[int, int, int]] = None) -> tf.data.Dataset:
-
+    tf_dataset_with_labels: tf.data.Dataset,
+    preprocess_func: Optional[Callable] = None,
+    image_dataset_dtype: Optional[tf.dtypes.DType] = None,
+    verbose: bool = True,
+    image_key: str = "image",
+    target_size: Optional[Tuple[int, int, int]] = None,
+) -> tf.data.Dataset:
     for element in tf_dataset_with_labels:
         image = element[image_key]
         image_shape = image.shape.as_list()
@@ -27,11 +24,18 @@ def extract_and_preprocess_images(
     if target_size is not None:
         image_shape = target_size
 
-    images_np = np.zeros(shape=(tf_dataset_with_labels.cardinality().numpy(), *image_shape), dtype=dtype.as_numpy_dtype)
+    images_np = np.zeros(
+        shape=(tf_dataset_with_labels.cardinality().numpy(), *image_shape),
+        dtype=dtype.as_numpy_dtype,
+    )
 
-    progress_bar_wrapper = tqdm(tf_dataset_with_labels) if verbose else tf_dataset_with_labels
+    progress_bar_wrapper = (
+        tqdm(tf_dataset_with_labels) if verbose else tf_dataset_with_labels
+    )
     if verbose:
-        progress_bar_wrapper.set_description(f"Extracing and preprocessing images from dataset")
+        progress_bar_wrapper.set_description(
+            "Extracing and preprocessing images from dataset"
+        )
 
     for idx, element in enumerate(progress_bar_wrapper):
         image = element[image_key]

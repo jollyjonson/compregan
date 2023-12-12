@@ -1,25 +1,37 @@
-from typing import Tuple, Union, Callable
+from typing import Callable, Tuple, Union
 
-import tensorflow.keras as keras
 import tensorflow as tf
+import tensorflow.keras as keras
 
 from compregan.gan.components import Components
+
 from .distortion import Distortion
 
 
 class SemanticallyWeightedDistortion(Distortion):
-
-    def __init__(self, multiplier: float, distortion: tf.keras.losses.Loss = keras.losses.MSE):
+    def __init__(
+        self,
+        multiplier: float,
+        distortion: tf.keras.losses.Loss = keras.losses.MSE,
+    ):
         self.multiplier = multiplier
         self._distortion = distortion
 
     @property
     def needed_components(self) -> Tuple[Components, ...]:
-        return Components.OriginalCodecData, Components.ReconstructedCodecData, Components.Conditional
+        return (
+            Components.OriginalCodecData,
+            Components.ReconstructedCodecData,
+            Components.Conditional,
+        )
 
     @tf.function
-    def __call__(self, original_data: tf.Tensor, reconstructed_data: tf.Tensor,
-                 conditional: Union[tf.keras.Model, Callable]) -> tf.Tensor:
+    def __call__(
+        self,
+        original_data: tf.Tensor,
+        reconstructed_data: tf.Tensor,
+        conditional: Union[tf.keras.Model, Callable],
+    ) -> tf.Tensor:
         semantic_map = conditional(original_data)
         distortion = self._distortion(original_data, reconstructed_data)
         weighted_distortion = distortion * semantic_map

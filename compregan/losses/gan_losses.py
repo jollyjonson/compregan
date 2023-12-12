@@ -4,11 +4,10 @@ from .gan_loss import GANLoss
 
 
 class LeastSquares(GANLoss):
-
     @staticmethod
     @tf.function
     def f(z):
-        return tf.square(z - 1.)
+        return tf.square(z - 1.0)
 
     @staticmethod
     @tf.function

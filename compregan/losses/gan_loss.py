@@ -4,7 +4,6 @@ import tensorflow as tf
 
 
 class GANLoss(metaclass=ABCMeta):
-
     @staticmethod
     @tf.function
     @abstractmethod
