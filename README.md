@@ -1,4 +1,5 @@
 ## Toolbox for perceptual data compression using GANs (or so)
+[![CI](https://github.com/jollyjonson/compregan/actions/workflows/main.yml/badge.svg)](https://github.com/jollyjonson/compregan/actions/workflows/main.yml)
 
 Still in the very early construction phase...
 
