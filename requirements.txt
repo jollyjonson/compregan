@@ -1,0 +1,12 @@
+tensorflow
+tensorflow_datasets
+tensorflow_compression
+tensorflow_addons
+scipy
+numpy
+tensorboard
+tqdm
+matplotlib
+sortedcontainers
+ipython
+jupyter
